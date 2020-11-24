@@ -1,19 +1,14 @@
-group 'com.legyver'
+description = 'A generic task handling library for JavaFX'
 
 apply plugin: 'java'
-apply plugin: 'idea'
+apply plugin: 'java-library'
 apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
+apply from: 'https://raw.githubusercontent.com/Legyver/common-build/1.0/publish.gradle'
 
 sourceCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-}
 
 repositories {
     mavenLocal()
@@ -24,23 +19,3 @@ dependencies {
 	//exception
 	compile group: 'com.legyver', name: 'core', version: '1.0.0.0'
 }
-
-publishing {
-    publications {
-        tuktukfx(MavenPublication) {
-    			artifactId 'tuktukfx'
-    			from components.java
-        }
-    }
-    repositories {
-		mavenLocal()
-    }
-}
-
-version = "1.0.0.0"
-
-jar {
-
-}
-
-task install(dependsOn: "publishToMavenLocal")

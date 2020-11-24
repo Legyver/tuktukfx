@@ -10,23 +10,47 @@ import com.legyver.tuktukfx.event.TaskEventType;
 import com.legyver.core.exception.CoreException;
 import com.legyver.tuktukfx.observer.ProgressObserver;
 import com.legyver.tuktukfx.observer.TaskObserver;
-import com.legyver.tuktukfx.processor.TaskProcessorArgs;
 import com.legyver.tuktukfx.status.TaskTimingData;
 
-public abstract class AbstractObservableTask<T, U extends TaskProcessorArgs> implements ITask<T>, ProtoTaskFlow<U> {
+/**
+ *
+ * @param <R> The return type (if any) of the task.
+ * @param <U> The type of task context
+ */
+public abstract class AbstractObservableTask<R, U extends TaskTimingData> implements ITask<R>, ProtoTaskFlow {
 
+	/**
+	 * Tasks can have observers which are registered to a {@link TaskEventType}
+	 */
 	private final Map<String, List<TaskObserver>> observers = new HashMap<>();
-	private final TaskTimingData timingData;
+	/**
+	 * The task
+	 */
+	protected final U context;
 
-	public AbstractObservableTask(TaskTimingData timingData) {
-		this.timingData = timingData;
+	/**
+	 * Constructor to create an Observable task.
+	 * @param context: The task context which includes timing data.  If you don't specify the context,
+	 *               You will need to override {@link #execute(TaskStatusAdapter)}
+	 */
+	public AbstractObservableTask(U context) {
+		this.context = context;
 	}
 
+	/**
+	 * Register observers to a task
+	 * @param statusAdapter: The mechanism to relay status messages to the outer task.
+	 */
 	@Override
-	public void addObservers(TaskStatusAdapter task) {
-		addObserver(TaskEventType.CURSOR, new ProgressObserver(task, timingData));
+	public void addObservers(TaskStatusAdapter statusAdapter) {
+		addObserver(TaskEventType.CURSOR, new ProgressObserver(statusAdapter, context));
 	}
 
+	/**
+	 * Register an observer to a task for a particular {@link TaskEventType}
+	 * @param type: The type to register observer for
+	 * @param observer: the observer
+	 */
 	protected void addObserver(String type, TaskObserver observer) {
 		List<TaskObserver> processedEventObservers = observers.get(type);
 		if (processedEventObservers == null) {
@@ -36,6 +60,12 @@ public abstract class AbstractObservableTask<T, U extends TaskProcessorArgs> imp
 		processedEventObservers.add(observer);
 	}
 
+	/**
+	 * Notify method of the Observer pattern
+	 * @param event: The event to notify the observers of
+	 * @throws CoreException
+	 * 		If your observer throws an exception, this exception will be relayed
+	 */
 	@Override
 	public void notifyObservers(TaskEvent event) throws CoreException {
 		List<TaskObserver> eventObservers = observers.get(event.getType());
@@ -44,5 +74,18 @@ public abstract class AbstractObservableTask<T, U extends TaskProcessorArgs> imp
 				observer.handle(event);
 			}
 		}
+	}
+
+	/**
+	 * Convenience default implementation.  Override if you need to return a value when the task completes
+	 * @param taskStatusAdapter the {@link TaskStatusAdapter}
+	 * @return null by default.
+	 * @throws CoreException
+	 * 	In the event of an exception, wrap it in a CoreException and rethrow it.
+	 */
+	@Override
+	public R execute(TaskStatusAdapter taskStatusAdapter) throws CoreException {
+		process(taskStatusAdapter, context.getDomainSize());
+		return null;
 	}
 }
