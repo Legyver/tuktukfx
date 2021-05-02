@@ -1,13 +1,7 @@
 description = 'A generic task handling library for JavaFX'
 
-apply plugin: 'java'
-apply plugin: 'java-library'
-apply plugin: 'maven-publish'
-apply plugin: 'signing'
+apply from: 'https://raw.githubusercontent.com/Legyver/common-build/1.5/publish.gradle'
 
-apply from: 'https://raw.githubusercontent.com/Legyver/common-build/1.0/publish.gradle'
-
-sourceCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 repositories {
@@ -17,5 +11,9 @@ repositories {
 
 dependencies {
 	//exception
-	compile group: 'com.legyver', name: 'core', version: '1.0.0.0'
+	api group: 'com.legyver', name: 'core', version: '1.1.0.0'
+}
+
+java {
+    modularity.inferModulePath = true
 }

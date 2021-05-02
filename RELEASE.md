@@ -1,4 +1,6 @@
 # Releases
+## 1.2.0
+Made publish com.legyver.tuktukfx module
 ## 1.1.0
 Breaking release.  Simplified API.
 - JavaFxAdapter removed from library to remove dependency on JavaFX
