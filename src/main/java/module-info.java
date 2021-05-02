@@ -1,3 +1,6 @@
+/**
+ * A generic task handling library for JavaFX
+ */
 module com.legyver.tuktukfx {
 	requires transitive com.legyver.core;
 

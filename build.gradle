@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
 	//exception
-	api group: 'com.legyver', name: 'core', version: '1.1.0.0'
+	api group: 'com.legyver', name: 'core', version: '1.1.2.0'
 }
 
 java {
