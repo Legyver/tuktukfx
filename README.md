@@ -1,7 +1,7 @@
 # tuktukfx
 Generic Task handling library for JavaFX
 ```gradle
-implementation group: 'com.legyver', name: 'tuktukfx', version: '1.2.0.0'
+implementation group: 'com.legyver', name: 'tuktukfx', version: '2.0.0-alpha.1'
 ```
 
 ## Features

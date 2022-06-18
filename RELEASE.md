@@ -1,4 +1,7 @@
 # Releases
+## 2.0.0
+- Adapted Semantic Versioning 2.0
+- Compiled on JDK 11
 ## 1.2.0
 Made publish com.legyver.tuktukfx module
 ## 1.1.0
